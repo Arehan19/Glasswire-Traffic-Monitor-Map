@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Glasswire - Live Traffic Monitor Map</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Animated Background -->
+  <div class="animated-background">
+    <div class="floating-particle"></div>
+    <div class="floating-particle"></div>
+    <div class="floating-particle"></div>
+  </div>
+
+  <!-- Background Effects -->
+  <div class="background-effects">
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <div class="logo-pulse"></div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>Glasswire</h1>
+          <span>Network Traffic Monitor</span>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="live-indicator">
+          <div class="pulse-dot"></div>
+          <span>Live Monitoring</span>
+          <div class="status-badge">ACTIVE</div>
+        </div>
+        <div class="connection-toggle">
+          <span>Real-time Updates</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="liveConnections" checked>
+            <span class="slider">
+              <span class="slider-inner"></span>
+            </span>
+          </label>
+        </div>
+        <div class="theme-toggle">
+          <button id="themeToggle" class="theme-toggle-btn">
+            <svg class="theme-icon sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2" />
+              <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" />
+              <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" />
+              <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
+              <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <svg class="theme-icon moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2"
+                fill="currentColor" />
+            </svg>
+          </button>
+        </div>
+        <div class="current-time" id="currentTime"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard -->
+  <main class="dashboard">
+    <!-- Left Panel - Applications -->
+    <section class="panel applications-panel">
+      <div class="panel-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="2" />
+          <rect x="14" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="2" />
+          <rect x="4" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="2" />
+          <rect x="14" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="2" />
+        </svg>
+        <h2>Active Applications</h2>
+        <div class="app-count">
+          <span id="activeAppCount">8</span>
+        </div>
+      </div>
+      <div class="total-stats">
+        <div class="stat-card upload">
+          <div class="stat-label">Upload</div>
+          <div class="stat-value" id="totalUpload">1,088 KB</div>
+        </div>
+        <div class="stat-card download">
+          <div class="stat-label">Download</div>
+          <div class="stat-value" id="totalDownload">905 KB</div>
+        </div>
+      </div>
+      <div class="applications-list" id="applicationsList">
+        <!-- Applications will be populated by JavaScript -->
+      </div>
+      <div class="panel-footer">
+        <div class="total-usage">
+          <div class="usage-header">
+            <span>Total Usage</span>
+          </div>
+          <div class="usage-metrics">
+            <div class="metric-item upload-metric">
+              <div class="metric-icon">↑</div>
+              <div class="metric-value" id="totalUploadMetric">538.6 MB</div>
+            </div>
+            <div class="center-metrics">
+              <div class="total-combined">
+                <div class="combined-value" id="totalCombined">29.2 GB</div>
+                <div class="combined-label">Total</div>
+              </div>
+              <div class="current-rate">
+                <div class="rate-value" id="currentRate">15.3 MB/s</div>
+                <div class="rate-label">Current Rate</div>
+              </div>
+            </div>
+            <div class="metric-item download-metric">
+              <div class="metric-icon">↓</div>
+              <div class="metric-value" id="totalDownloadMetric">783.5 KB</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Center Panel - Network Overview -->
+    <section class="panel network-overview-panel">
+      <div class="panel-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+          <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+            stroke="currentColor" stroke-width="2" />
+        </svg>
+        <h2>Network Overview</h2>
+        <div class="active-connections">
+          <div class="connection-count" id="connectionCount">12</div>
+          <span>connections</span>
+        </div>
+      </div>
+
+      <!-- World Map -->
+      <div class="world-map-container">
+        <svg id="worldMap" class="world-map" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+          <!-- Realistic World Map -->
+          <g class="map-outline" stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none">
+            <!-- North America -->
+            <path
+              d="M150,150 L200,120 L250,130 L280,110 L320,120 L360,140 L380,180 L370,220 L340,250 L300,270 L260,280 L220,270 L180,250 L150,220 L130,190 Z" />
+            <!-- South America -->
+            <path
+              d="M260,290 L280,280 L300,290 L320,310 L330,340 L320,370 L300,390 L280,400 L260,390 L250,360 L250,330 Z" />
+            <!-- Europe -->
+            <path d="M450,150 L480,140 L510,150 L530,170 L540,190 L530,210 L510,220 L480,210 L460,190 L450,170 Z" />
+            <!-- Africa -->
+            <path
+              d="M460,230 L490,220 L520,240 L540,270 L530,300 L510,330 L480,340 L450,330 L430,300 L430,270 L440,240 Z" />
+            <!-- Asia -->
+            <path
+              d="M550,140 L620,130 L680,150 L740,170 L780,200 L790,230 L780,260 L740,280 L690,290 L640,280 L600,260 L570,230 L560,200 L550,170 Z" />
+            <!-- Australia -->
+            <path d="M720,340 L760,330 L800,340 L820,360 L810,380 L780,390 L750,380 L730,360 Z" />
+            <!-- Additional details for realism -->
+            <!-- Greenland -->
+            <path d="M380,100 L400,90 L420,100 L430,120 L420,140 L400,150 L380,140 L370,120 Z" />
+            <!-- UK -->
+            <path d="M440,140 L450,135 L460,140 L465,150 L460,160 L450,165 L440,160 L435,150 Z" />
+            <!-- Japan -->
+            <path d="M780,180 L790,175 L800,180 L805,190 L800,200 L790,205 L780,200 L775,190 Z" />
+            <!-- New Zealand -->
+            <path d="M850,380 L860,375 L870,380 L875,390 L870,400 L860,405 L850,400 L845,390 Z" />
+          </g>
+
+          <!-- Connection dots and lines will be added by JavaScript -->
+          <g id="connectionDots"></g>
+        </svg>
+
+        <!-- Dot Info Legend -->
+        <div class="dot-info">
+          <div class="dot-info-item">
+            <div class="dot active"></div>
+            <span class="dot-label">Secure Connection</span>
+          </div>
+          <div class="dot-info-item">
+            <div class="dot warning"></div>
+            <span class="dot-label">Warning Connection</span>
+          </div>
+          <div class="dot-info-item">
+            <div class="dot danger"></div>
+            <span class="dot-label">Danger Connection</span>
+          </div>
+        </div>
+
+        <!-- Map Popup -->
+        <div class="map-popup" id="mapPopup">
+          <div class="popup-header">
+            <h3 id="popupTitle">Connection Info</h3>
+            <button class="popup-close" id="popupClose">&times;</button>
+          </div>
+          <div class="popup-content" id="popupContent">
+            <!-- Content will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <div class="network-segments">
+        <div class="memory-segment lan-segment">
+          <div class="segment-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" />
+              <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" />
+              <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <h3>LAN Network</h3>
+            <div class="segment-status active">Connected</div>
+          </div>
+          <div class="memory-display">
+            <div class="memory-usage">
+              <div class="memory-bar">
+                <div class="memory-fill lan-memory" id="lanMemory" style="width: 65%;"></div>
+              </div>
+              <div class="memory-text">
+                <span class="memory-used">6.5 GB</span>
+                <span class="memory-total">/ 10 GB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="network-connection-line"></div>
+        <div class="memory-segment wan-segment">
+          <div class="segment-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+              <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                stroke="currentColor" stroke-width="2" />
+            </svg>
+            <h3>WAN Network</h3>
+            <div class="segment-status active">Connected</div>
+          </div>
+          <div class="memory-display">
+            <div class="memory-usage">
+              <div class="memory-bar">
+                <div class="memory-fill wan-memory" id="wanMemory" style="width: 42%;"></div>
+              </div>
+              <div class="memory-text">
+                <span class="memory-used">4.2 GB</span>
+                <span class="memory-total">/ 10 GB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Traffic Chart -->
+      <div class="chart-section">
+        <div class="chart-header">
+          <h3>Network Traffic</h3>
+          <div class="traffic-value" id="currentTraffic">87.3 MB/s</div>
+        </div>
+        <!-- Time Period Controls -->
+        <div class="time-period-controls">
+          <button class="time-period-btn active" data-period="live">Live</button>
+          <button class="time-period-btn" data-period="1h">1H</button>
+          <button class="time-period-btn" data-period="6h">6H</button>
+          <button class="time-period-btn" data-period="24h">24H</button>
+          <button class="time-period-btn" data-period="7d">7D</button>
+        </div>
+        <div class="chart-container">
+          <div class="chart" id="liveChart">
+            <!-- Chart bars will be generated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Panel - Stats and Connections -->
+    <section class="right-panels">
+      <!-- Network Stats -->
+      <div class="panel network-stats-panel">
+        <div class="panel-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" />
+            <path d="M7 16L12 11L16 15L21 10" stroke="currentColor" stroke-width="2" />
+          </svg>
+          <h2>Network Stats</h2>
+        </div>
+        <div class="network-metrics">
+          <div class="metric-card upload-metric">
+            <div class="metric-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="22,12 18,8 18,16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M2 12h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <span>Upload</span>
+              <div class="metric-value" id="uploadSpeed">538.9 KB/s</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill upload-progress" id="uploadProgress"></div>
+            </div>
+          </div>
+          <div class="metric-card download-metric">
+            <div class="metric-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="8,12 12,16 16,12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M12 2v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <span>Download</span>
+              <div class="metric-value" id="downloadSpeed">263.8 KB/s</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill download-progress" id="downloadProgress"></div>
+            </div>
+          </div>
+          <div class="additional-metrics">
+            <div class="mini-metric">
+              <div class="mini-metric-label">Latency</div>
+              <div class="mini-metric-value" id="latency">45ms</div>
+            </div>
+            <div class="mini-metric">
+              <div class="mini-metric-label">Packet Loss</div>
+              <div class="mini-metric-value" id="packetLoss">0.1%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global Connections -->
+      <div class="panel connections-panel">
+        <div class="panel-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+            <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+              stroke="currentColor" stroke-width="2" />
+          </svg>
+          <h2>Global Connections</h2>
+        </div>
+        <div class="connection-filter">
+          <select id="connectionFilter">
+            <option value="all">All Regions</option>
+            <option value="secure">Secure Only</option>
+            <option value="warning">Warning Only</option>
+            <option value="danger">Danger Only</option>
+          </select>
+        </div>
+        <div class="connection-list" id="connectionList">
+          <!-- Connections will be populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <h2>Initializing Glasswire</h2>
+      <p>Connecting to network interfaces...</p>
+      <div class="loading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
